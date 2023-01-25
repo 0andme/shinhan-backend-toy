@@ -18,4 +18,7 @@ class Order(models.Model):
         db_table='shinhan_order'
         verbose_name='주문 정보'
         verbose_name_plural='주문 정보'
+
+    def __str__(self):
+        return f'id:{self.id} ({self.ord_no})'
     
