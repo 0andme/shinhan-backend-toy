@@ -21,4 +21,25 @@ class Order(models.Model):
 
     def __str__(self):
         return f'id:{self.id} ({self.ord_no})'
-    
+
+
+class Comment(models.Model):
+    # 사용자 외래키
+    # 장고에서는 문자열로 앱명.모델명으로 표현할 수 있음
+    # 이러면 순환참조를 할 일이 없음
+    member=models.ForeignKey('member.Member',on_delete=models.CASCADE,verbose_name="사용자")
+    # 상품 외래키
+    order=models.ForeignKey('order.Order',on_delete=models.CASCADE,verbose_name="상품")
+    # 댓글 내용
+    content=models.TextField(verbose_name='내용')
+    # tstamp
+    tstamp=models.DateTimeField(auto_now_add=True,verbose_name='등록 일시')
+
+    class Meta:
+        db_table='shinhan_order_comment'
+        verbose_name='주문 댓글'
+        verbose_name_plural='주문 댓글'
+
+    def __str__(self):
+        return f"{self.id}/{self.member}  / {self.order} / {self.content}"
+
