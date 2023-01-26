@@ -29,7 +29,6 @@ class OrderDetailView(
         return Order.objects.all().order_by('-id')
 
     def get(self,request,*args,**kwargs):
-        print(self.kwargs.get('pk'))
         return self.retrieve(request,args,kwargs)
 
 
@@ -40,7 +39,9 @@ class CommentListView(
     serializer_class=CommentSerializer
     def get_queryset(self):
         order_id=self.kwargs.get('pk')
-        return Comment.objects.filter(order_id=order_id).order_by('-id')
+        if(order_id):
+            return Comment.objects.filter(order_id=order_id).order_by('-id')
+        return Comment.objects.none()
 
     def get(self,request,*args,**kwargs):
        return self.list(request,args,kwargs)
@@ -52,9 +53,6 @@ class CommentCreateView(
 ):
     serializer_class=CommentCreateSerializer
     permission_classes=[IsAuthenticated]
-
-    def get_queryset(self):
-        return Comment.objects.all()
 
     def post(self, request, *args, **kwargs):
         return self.create(request, args, kwargs)
