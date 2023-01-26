@@ -7,13 +7,10 @@ class OrderSerializer(serializers.ModelSerializer):
         fields="__all__"
 
 class CommentSerializer(serializers.ModelSerializer):
-    order_id=serializers.SerializerMethodField()
     member_username=serializers.SerializerMethodField()
     tstamp=serializers.DateTimeField(
         read_only=True,format='%Y-%M-%d %H:%M:%S'
     )
-    def get_order_id(self,obj):
-        return obj.order.id
 
     def get_member_username(self,obj):
         return obj.member.username
