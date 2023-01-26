@@ -28,8 +28,8 @@ class Comment(models.Model):
     # 장고에서는 문자열로 앱명.모델명으로 표현할 수 있음
     # 이러면 순환참조를 할 일이 없음
     member=models.ForeignKey('member.Member',on_delete=models.CASCADE,verbose_name="사용자")
-    # 상품 외래키
-    order=models.ForeignKey('order.Order',on_delete=models.CASCADE,verbose_name="상품")
+    # 주문 외래키
+    order=models.ForeignKey('order.Order',on_delete=models.CASCADE,verbose_name="주문")
     # 댓글 내용
     content=models.TextField(verbose_name='내용')
     # tstamp
