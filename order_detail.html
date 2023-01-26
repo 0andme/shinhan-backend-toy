@@ -28,7 +28,6 @@
       function create_comment() {
         const search = new URLSearchParams(location.search);
         const order_id = search.get("order_id");
-        console.log(order_id);
         $.ajax({
           type: "POST",
           url: "http://127.0.0.1:8000/api/order/comment",
@@ -50,40 +49,43 @@
       $(document).ready(function () {
         const search = new URLSearchParams(location.search);
         const order_id = search.get("order_id");
-        $.get(`http://127.0.0.1:8000/api/order/${order_id}`).then((res) => {
-          const temp = [...Object.keys(res)];
-          for (let i = 0; i < temp.length; i++) {
-            $("#detail").append(
-              $(`
-              <div id=${temp[i]}>
-                  <span> ${temp[i]}</span>
-                  <span> : ${res[temp[i]]}</span>
-              </div>`)
-            );
-          }
-        });
-
-        $.get(`http://127.0.0.1:8000/api/order/${order_id}/comment`).then(
-          (res) => {
-            comments = res.results;
-            console.log(comments);
-            $("#comments").html();
-            $("#cmment_count").text(`총 ${comments.length}개의 댓글`);
-
-            for (let i = 0; i < comments.length; i++) {
-              const data = comments[i];
-              $("#comments").append(
+        if (order_id > 0) {
+          $.get(`http://127.0.0.1:8000/api/order/${order_id}`).then((res) => {
+            const orderItem = Object.entries(res).map(([key, val]) => {
+              return [key, val];
+            });
+            for (let i = 0; i < orderItem.length; i++) {
+              $("#detail").append(
                 $(`
+              <div id=${orderItem[i][0]}>
+                  <span> ${orderItem[i][0]}</span>
+                  <span> : ${orderItem[i][1]}</span>
+              </div>`)
+              );
+            }
+          });
+
+          $.get(`http://127.0.0.1:8000/api/order/${order_id}/comment`).then(
+            (res) => {
+              const comments = res.results;
+              $("#comments").html();
+              $("#cmment_count").text(`총 ${comments.length}개의 댓글`);
+
+              for (let i = 0; i < comments.length; i++) {
+                const data = comments[i];
+                $("#comments").append(
+                  $(`
               <li class="list-group-item">
                 <span id="username">작성자 : ${data.member_username}</span>
                 <span id="tstamp">일자 : ${data.tstamp}</span>
                 <div id="content">내용 : ${data.content}</div>
               </li>
             `)
-              );
+                );
+              }
             }
-          }
-        );
+          );
+        }
       });
     </script>
   </head>
