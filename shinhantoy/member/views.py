@@ -22,8 +22,7 @@ class MemberChangePasswordView(
     serializer_class=MemberSerializer
     #로그인한 사용자만 들어올수 있는 API가 됨
     # request.user 가 있음
-
-    parser_classes=[IsAuthenticated]
+    permission_classes=[IsAuthenticated]
 
     def put(self, request, *args, **kwargs):
         current=request.data.get('password')
