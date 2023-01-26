@@ -25,7 +25,6 @@ class MemberChangePasswordView(
         current=request.data.get('password')
         change_password=request.data.get('change_password')
         change_password_check=request.data.get('change_password_check')
-        print(username,current,change_password,change_password_check)
 
         # 변경 비번 두번 확인
         if change_password!=change_password_check:

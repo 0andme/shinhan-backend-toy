@@ -35,7 +35,6 @@
             password: $("#password").val(),
           },
           success: (res) => {
-            print(res);
             $("#token").text(res.access);
           },
         });
