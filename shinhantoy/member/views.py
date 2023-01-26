@@ -4,6 +4,7 @@ from .serializers import MemberSerializer
 from .models import Member
 from django.contrib.auth.hashers import check_password,make_password
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 class MemberRegisterView(
     mixins.CreateModelMixin,
@@ -19,9 +20,12 @@ class MemberChangePasswordView(
 ):
 
     serializer_class=MemberSerializer
+    #로그인한 사용자만 들어올수 있는 API가 됨
+    # request.user 가 있음
+
+    parser_classes=[IsAuthenticated]
 
     def put(self, request, *args, **kwargs):
-        username=request.data.get('username')
         current=request.data.get('password')
         change_password=request.data.get('change_password')
         change_password_check=request.data.get('change_password_check')
@@ -33,15 +37,7 @@ class MemberChangePasswordView(
                  status=status.HTTP_400_BAD_REQUEST,
              )
         
-        # 유저가 있는 지 확인 하는 코드
-        if not Member.objects.filter(username=username).exists():
-            return Response(
-                 {'detail':'no account'},
-                 status=status.HTTP_404_NOT_FOUND,
-            )
-
-        # 유저 찾기
-        member=Member.objects.get(username=username)
+        member=request.user
 
         if not check_password(current,member.password):
             return Response(
