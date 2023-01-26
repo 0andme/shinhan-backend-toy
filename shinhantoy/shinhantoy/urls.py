@@ -11,4 +11,5 @@ urlpatterns = [
     path('api/order', include('order.urls')),
     path('admin/', admin.site.urls),
     path('api/token',TokenObtainPairView.as_view()),
+    path('api/member', include('member.urls')),
 ]
