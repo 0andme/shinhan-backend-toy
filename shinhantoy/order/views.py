@@ -53,3 +53,15 @@ class CommentCreateView(
 
     def post(self, request, *args, **kwargs):
         return self.create(request, args, kwargs)
+
+class CommentDetailView(
+    mixins.DestroyModelMixin,
+    generics.GenericAPIView
+):
+    serializer_class=CommentSerializer
+
+    def get_queryset(self):
+        return Comment.objects.all()
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, args, kwargs)
