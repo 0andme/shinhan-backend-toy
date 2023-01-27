@@ -28,6 +28,35 @@
       const search = new URLSearchParams(location.search);
       const order_id = search.get("order_id");
 
+      function search_comment() {
+        searchword = $("#searchInput").val();
+        if (order_id > 0) {
+          $.get(
+            `http://127.0.0.1:8000/api/order/${order_id}/comment?search=${searchword}`
+          ).then((res) => {
+            const comments = res.results;
+            $("#comments").html("");
+            $("#comment_count").text(`총 ${comments.length}개의 댓글`);
+
+            for (let i = 0; i < comments.length; i++) {
+              const data = comments[i];
+              $("#comments").append(
+                $(`
+              <li class="list-group-item">
+                <button onclick="delete_comment(${data.id})" type="button" class="btn-close text-end" aria-label="Close"></button>
+                <div>
+                  <span id="username">작성자 : ${data.member_username}</span>
+                  <span id="tstamp">일자 : ${data.tstamp}</span>
+                  <div id="content">내용 : ${data.content}</div>
+                </div>
+              </li>
+            `)
+              );
+            }
+          });
+        }
+      }
+
       function create_comment() {
         $.ajax({
           type: "POST",
@@ -86,7 +115,7 @@
             (res) => {
               const comments = res.results;
               $("#comments").html();
-              $("#cmment_count").text(`총 ${comments.length}개의 댓글`);
+              $("#comment_count").text(`총 ${comments.length}개의 댓글`);
 
               for (let i = 0; i < comments.length; i++) {
                 const data = comments[i];
@@ -140,9 +169,26 @@
           댓글 등록
         </button>
       </div>
-      <ul class="list-group list-group-flush" id="comments">
-        <h3 id="cmment_count"></h3>
-      </ul>
+      <br />
+      <div class="input-group input-group-lg">
+        <input
+          id="searchInput"
+          type="text"
+          class="form-control"
+          aria-label="Sizing example input"
+          aria-describedby="inputGroup-sizing-lg"
+        />
+        <button
+          onclick="search_comment()"
+          class="input-group-text"
+          id="inputGroup-sizing-lg"
+        >
+          검색
+        </button>
+      </div>
+      <br />
+      <h3 id="comment_count"></h3>
+      <ul class="list-group list-group-flush" id="comments"></ul>
     </div>
   </body>
 </html>
