@@ -60,6 +60,7 @@ class CommentDetailView(
     generics.GenericAPIView
 ):
     serializer_class=CommentSerializer
+    permission_classes=[IsAuthenticated]
 
     def get_queryset(self):
         return Comment.objects.all()
