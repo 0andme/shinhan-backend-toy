@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import generics,mixins
 from .serializer import OrderSerializer,CommentSerializer,CommentCreateSerializer
 from .models import Order,Comment
-
+from rest_framework.permissions import IsAuthenticated
 
 class OrderListView(
     mixins.ListModelMixin,
@@ -50,6 +50,7 @@ class CommentCreateView(
     generics.GenericAPIView
 ):
     serializer_class=CommentCreateSerializer
+    permission_classes=[IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         return self.create(request, args, kwargs)
