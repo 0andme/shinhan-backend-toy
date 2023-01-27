@@ -36,8 +36,11 @@ class CommentListView(
 ):
     serializer_class=CommentSerializer
     def get_queryset(self):
+        searchword=self.request.query_params.get('search')
         order_id=self.kwargs.get('pk')
         if(order_id):
+            if(searchword):
+                return Comment.objects.filter( order_id=order_id , content__contains=searchword).order_by('-id')
             return Comment.objects.filter(order_id=order_id).order_by('-id')
         return Comment.objects.none()
 
