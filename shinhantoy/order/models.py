@@ -43,3 +43,14 @@ class Comment(models.Model):
     def __str__(self):
         return f"{self.id}/{self.member}  / {self.order} / {self.content}"
 
+
+class Like(models.Model):
+    member=models.ForeignKey('member.Member',on_delete=models.CASCADE,verbose_name="사용자")
+    order=models.ForeignKey('order.Order',on_delete=models.CASCADE,verbose_name="주문")
+    comment=models.ForeignKey('order.comment',on_delete=models.CASCADE,verbose_name="댓글")
+
+    class Meta:
+        db_table='shinhan_comment_like'
+        verbose_name='댓글 좋아요'
+        verbose_name_plural='댓글 좋아요'
+        
