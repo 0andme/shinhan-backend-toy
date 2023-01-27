@@ -167,6 +167,15 @@
             // pagination
             let start_page = page - 2 > 0 ? page - 2 : 1;
             let last_page = page + 2 < maxpage ? page + 2 : maxpage;
+            $("#pagination").html("");
+            $("#pagination").append(
+              $(`
+                  <li class="page-item" id="prev">
+                    <a class="page-link" href="?order_id=${order_id}&page=${
+                page - 1 ? page - 1 : 1
+              }">Previous</a>
+                  </li>`)
+            );
             for (let i = start_page; i <= last_page; i++) {
               $("#pagination").append(
                 $(`
@@ -176,6 +185,15 @@
                 `)
               );
             }
+
+            $("#pagination").append(
+              $(`
+                  <li class="page-item" id="next">
+                    <a class="page-link" href="?order_id=${order_id}&page=${
+                page + 1 <= maxpage ? page + 1 : maxpage
+              }">Next</a>
+                  </li>`)
+            );
           });
         }
       });
