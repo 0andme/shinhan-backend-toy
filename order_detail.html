@@ -48,6 +48,22 @@
           },
         });
       }
+      function delete_comment(comment_id) {
+        $.ajax({
+          type: "DELETE",
+          url: `http://127.0.0.1:8000/api/order/comment/${comment_id}`,
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "JWT " + $("#token").val());
+          },
+          success: (res) => {
+            alert("댓글 삭제 완료");
+            location.reload();
+          },
+          error: (res) => {
+            console.error(res);
+          },
+        });
+      }
       $(document).ready(function () {
         if (order_id > 0) {
           $.get(`http://127.0.0.1:8000/api/order/${order_id}`).then((res) => {
@@ -76,9 +92,12 @@
                 $("#comments").append(
                   $(`
               <li class="list-group-item">
-                <span id="username">작성자 : ${data.member_username}</span>
-                <span id="tstamp">일자 : ${data.tstamp}</span>
-                <div id="content">내용 : ${data.content}</div>
+                <button onclick="delete_comment(${data.id})" type="button" class="btn-close text-end" aria-label="Close"></button>
+                <div>
+                  <span id="username">작성자 : ${data.member_username}</span>
+                  <span id="tstamp">일자 : ${data.tstamp}</span>
+                  <div id="content">내용 : ${data.content}</div>
+                </div>
               </li>
             `)
                 );
