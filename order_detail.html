@@ -31,6 +31,27 @@
       if (!page) {
         page = 1;
       }
+
+      function toggle_like(comment_id) {
+        $.ajax({
+          type: "POST",
+          url: "http://127.0.0.1:8000/api/order/comment/like",
+          data: {
+            order: order_id,
+            comment: comment_id,
+          },
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "JWT " + $("#token").val());
+          },
+          success: (res) => {
+            alert("좋아요를 눌렀습니다");
+            location.reload();
+          },
+          error: (res) => {
+            console.error(res);
+          },
+        });
+      }
       function search_comment() {
         searchword = $("#searchInput").val();
         if (order_id > 0) {
@@ -113,7 +134,7 @@
               );
             }
           });
-
+          // 전체 댓글 리스트 get
           $.get(
             `http://127.0.0.1:8000/api/order/${order_id}/comment?page=${page}`
           ).then((res) => {
@@ -123,21 +144,25 @@
             $("#comment_count").text(`총 ${comments.length}개의 댓글`);
 
             for (let i = 0; i < comments.length; i++) {
-              const data = comments[i];
+              const comment = comments[i];
               $("#comments").append(
                 $(`
               <li class="list-group-item">
-                <button onclick="delete_comment(${data.id})" type="button" class="btn-close text-end" aria-label="Close"></button>
+                <button onclick="delete_comment(${comment.id})" type="button" class="btn-close text-end" aria-label="Close"></button>
                 <div>
-                  <span id="username">작성자 : ${data.member_username}</span>
-                  <span id="tstamp">일자 : ${data.tstamp}</span>
-                  <div id="content">내용 : ${data.content}</div>
+                  <button type="button" onclick="toggle_like(${comment.id})" class="btn btn-light">좋아요</button>  
+                  <span> (${comment.like_count})</span>
+                </div>
+                <div>
+                  <span id="username">작성자 : ${comment.member_username}</span>
+                  <span id="tstamp">일자 : ${comment.tstamp}</span>
+                  <div id="content">내용 : ${comment.content}</div>
                 </div>
               </li>
             `)
               );
             }
-
+            // pagination
             let start_page = page - 2 > 0 ? page - 2 : 1;
             let last_page = page + 2 < maxpage ? page + 2 : maxpage;
             for (let i = start_page; i <= last_page; i++) {
