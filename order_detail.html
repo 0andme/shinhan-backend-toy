@@ -57,10 +57,10 @@
             for (let i = 0; i < orderItem.length; i++) {
               $("#detail").append(
                 $(`
-              <div id=${orderItem[i][0]}>
+              <li id=${orderItem[i][0]} class="list-group-item" style="display:flex;justify-content:space-between">
                   <span> ${orderItem[i][0]}</span>
-                  <span> : ${orderItem[i][1]}</span>
-              </div>`)
+                  <span>${orderItem[i][1]}</span>
+              </li>`)
               );
             }
           });
@@ -91,7 +91,7 @@
   </head>
   <body>
     <div class="container">
-      <div id="detail"></div>
+      <ul id="detail" class="list-group"></ul>
       <br />
       <div class="mb-3">
         <label for="token" class="form-label">토큰</label>
