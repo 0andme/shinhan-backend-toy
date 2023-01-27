@@ -53,12 +53,12 @@
                     }">Previous</a>
                   </li>`)
             );
-            $("#order_list").html();
+            $("#order_list").html("");
             for (let i = 0; i < orderlist.length; i++) {
               const order = orderlist[i];
               $("#order_list").append(
                 $(
-                  `<li class="list-group-item">주문 번호:${order.ord_no} / 주문 날짜:${order.ord_ymd}</li>`
+                  `<a href="order_detail.html?order_id=${order.id}" class="list-group-item">주문 번호:${order.ord_no} / 주문 날짜:${order.ord_ymd}</a>`
                 )
               );
               $("#pagination").append(
