@@ -28,13 +28,6 @@ class CommentCreateSerializer(serializers.ModelSerializer):
         
     )
 
-    def validate_member(self, value):
-        # 헤더에 토근을 넣어주지 않았을 때
-        if not value.is_authenticated :
-            raise serializers.ValidationError('member is required')
-        return value
-    
-
     class Meta:
         model=Comment
         fields="__all__"
