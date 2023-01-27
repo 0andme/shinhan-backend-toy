@@ -148,10 +148,12 @@
               $("#comments").append(
                 $(`
               <li class="list-group-item">
-                <button onclick="delete_comment(${comment.id})" type="button" class="btn-close text-end" aria-label="Close"></button>
-                <div>
+                <div class=" d-flex justify-content-between">
+                  <div>
                   <button type="button" onclick="toggle_like(${comment.id})" class="btn btn-light">좋아요</button>  
                   <span> (${comment.like_count})</span>
+                </div>
+                  <button onclick="delete_comment(${comment.id})" type="button" class="btn-close btn-primary" aria-label="Close"></button>
                 </div>
                 <div>
                   <span id="username">작성자 : ${comment.member_username}</span>
@@ -201,7 +203,7 @@
           placeholder="내용을 입력해주세요"
         ></textarea>
       </div>
-      <div class="text-right">
+      <div class="text-end">
         <button
           onclick="create_comment()"
           type="button"
@@ -231,9 +233,12 @@
 
       <h3 id="comment_count"></h3>
       <nav aria-label="Page navigation example">
-        <ul class="pagination" id="pagination"></ul>
+        <ul
+          class="pagination d-flex justify-content-center"
+          id="pagination"
+        ></ul>
       </nav>
-      <ul class="list-group list-group-flush" id="comments"></ul>
+      <ul class="list-group list-group-flush mb-5" id="comments"></ul>
     </div>
   </body>
 </html>
