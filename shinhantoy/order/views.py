@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from rest_framework import generics,mixins
-from .serializer import OrderSerializer,CommentSerializer,CommentCreateSerializer
-from .models import Order,Comment
+from rest_framework import generics,mixins,status
+from .serializer import OrderSerializer,CommentSerializer,CommentCreateSerializer,LikeCreateSerializer
+from .models import Order,Comment,Like
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 class OrderListView(
     mixins.ListModelMixin,
@@ -11,7 +12,7 @@ class OrderListView(
 
     serializer_class=OrderSerializer
     def get_queryset(self):
-        return  Order.objects.all().order_by('-id')
+        return  Order.objects.all().order_by('id')
 
     def get(self,request,*args,**kwargs):
         return self.list(request,args,kwargs)
@@ -70,3 +71,25 @@ class CommentDetailView(
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, args, kwargs)
+
+class LikeCreateView(
+    mixins.CreateModelMixin,
+    generics.GenericAPIView
+):
+    serializer_class=LikeCreateSerializer
+    permission_classes=[IsAuthenticated]
+
+    def get_queryset(self):
+        return Comment.objects.all()
+
+    def post(self,request,*args,**kwargs):
+        comment_id=request.data.get('comment')
+        order_id=request.data.get('order')
+        member=request.user
+
+
+        if  Like.objects.filter(member=member,order_id=order_id,comment_id=comment_id).exists():
+            Like.objects.filter(member=member,order_id=order_id,comment_id=comment_id).delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+            
+        return self.create(request,args,kwargs)
