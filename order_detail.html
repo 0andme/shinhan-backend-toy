@@ -114,7 +114,7 @@
           $.get(`http://127.0.0.1:8000/api/order/${order_id}/comment`).then(
             (res) => {
               const comments = res.results;
-              $("#comments").html();
+              $("#comments").html("");
               $("#comment_count").text(`총 ${comments.length}개의 댓글`);
 
               for (let i = 0; i < comments.length; i++) {
