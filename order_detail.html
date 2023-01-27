@@ -25,9 +25,10 @@
       crossorigin="anonymous"
     ></script>
     <script>
+      const search = new URLSearchParams(location.search);
+      const order_id = search.get("order_id");
+
       function create_comment() {
-        const search = new URLSearchParams(location.search);
-        const order_id = search.get("order_id");
         $.ajax({
           type: "POST",
           url: "http://127.0.0.1:8000/api/order/comment",
@@ -40,6 +41,7 @@
           },
           success: (res) => {
             alert("댓글 추가 완료");
+            location.reload();
           },
           error: (res) => {
             console.error(res);
@@ -47,8 +49,6 @@
         });
       }
       $(document).ready(function () {
-        const search = new URLSearchParams(location.search);
-        const order_id = search.get("order_id");
         if (order_id > 0) {
           $.get(`http://127.0.0.1:8000/api/order/${order_id}`).then((res) => {
             const orderItem = Object.entries(res).map(([key, val]) => {
