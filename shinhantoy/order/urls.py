@@ -7,4 +7,5 @@ urlpatterns=[
     path("/<int:pk>/comment",views.CommentListView.as_view()),
     path("/comment",views.CommentCreateView.as_view()),
     path("/comment/<int:pk>",views.CommentDetailView.as_view()),
+    path("/comment/like",views.LikeCreateView.as_view()),
 ]
