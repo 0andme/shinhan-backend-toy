@@ -39,20 +39,13 @@
                   <a class="page-link">Previous</a>
                 </li>`)
         );
-
+        // 주문 리스트 get
         if (page > 0) {
           $.get(`http://127.0.0.1:8000/api/order?page=${page}`).then((res) => {
-            orderlist = res.results;
-            $("#pagination").html("");
-
-            $("#pagination").append(
-              $(`
-                  <li class="page-item" id="prev">
-                    <a class="page-link" href="?page=${
-                      page - 1 ? page - 1 : 1
-                    }">Previous</a>
-                  </li>`)
-            );
+            const orderlist = res.results;
+            let total_count = res.count;
+            const maxPage = Math.ceil(res.count / 10);
+            // 주문 리스트 출력
             $("#order_list").html("");
             for (let i = 0; i < orderlist.length; i++) {
               const order = orderlist[i];
@@ -61,25 +54,34 @@
                   `<a href="order_detail.html?order_id=${order.id}" class="list-group-item">주문 번호:${order.ord_no} / 주문 날짜:${order.ord_ymd}</a>`
                 )
               );
+            }
+            // pagination 출력
+            const start = page - 2 > 0 ? page - 2 : 1;
+            const end = page + 2 < maxPage ? page + 2 : maxPage;
+            $("#pagination").html("");
+            $("#pagination").append(
+              $(`
+                  <li class="page-item" id="prev">
+                    <a class="page-link" href="?page=${
+                      page - 1 ? page - 1 : 1
+                    }">Previous</a>
+                  </li>`)
+            );
+            for (let i = start; i <= end; i++) {
               $("#pagination").append(
                 $(`
-                    <li class="${
-                      page + i + 1 == page ? "page-item active" : "page-item"
-                    }">
-                      <a class="page-link" href="?page=${
-                        parseInt(page / 10) * 10 + i + 1
-                      }">
-                        ${parseInt(page / 10) * 10 + i + 1}
-                      </a>
+                    <li class="${page == i ? "page-item active" : "page-item"}">
+                      <a class="page-link" href="?page=${i}">${i}</a>
                     </li>
                      `)
               );
             }
-
             $("#pagination").append(
               $(`
                   <li class="page-item" id="next">
-                    <a class="page-link" href="?page=${page + 1}">Next</a> 
+                    <a class="page-link" href="?page=${
+                      page + 1 <= maxPage ? page + 1 : maxPage
+                    }">Next</a>
                   </li>`)
             );
           });
